@@ -15,11 +15,23 @@ describe("Operaciones CRUD de cafes", () => {
     expect(cafes).toBeInstanceOf(Array);
   });
 
-  it("Test delete -/cafes/:id- path for 404 code in case for wrong id", async () => {
+  it("Test delete -/cafes/:id- path for 404 code in case you delete a wrong id", async () => {
     const jwt = "jwtTest";
     const idTestingForDelete = 6;
     const response = await supertest(server).delete(`/cafes/${idTestingForDelete}`).set("Authorization", jwt).send();
     const status = response.statusCode;
     expect(status).toBe(404);
   });
+
+  it("Test post -/cafes- path for 201 in case to add a new cafe, and check the new cafe", async () => {
+    const newRandomIdForTesting = 500;
+    const newCafe = { id: newRandomIdForTesting, nombre: "Cafe test" };
+    const response = await supertest(server).post("/cafes").send(newCafe);
+    const cafes = response.body;
+    const status = response.statusCode;
+    expect(cafes).toContainEqual(newCafe);
+    expect(status).toBe(201);
+  });
+
+  //
 });
