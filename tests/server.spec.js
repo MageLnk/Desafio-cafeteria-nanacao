@@ -6,12 +6,7 @@ describe("Operaciones CRUD de cafes", () => {
     const response = await supertest(server).get("/cafes").send();
     const status = response.statusCode;
     const { body: cafes } = response;
-    //console.log("cafes", cafes);
     expect(status).toBe(200);
-    //expect(cafes).toEqual(expect.arrayContaining([expect.objectContaining({ id: 1 })]));
-    //expect(cafes).toEqual(expect.arrayContaining([expect.toMatchSnapshot({ id: expect.any(number) })]));
-    //expect(cafes).toContain(expect.arrayContaining([expect.objectContaining({ id: expect.any(Number) })]));
-    //expect(cafes).toEqual(expect.arrayContaining([expect.toBeInstanceOf(Object)]));
     expect(cafes).toBeInstanceOf(Array);
   });
 
@@ -33,5 +28,13 @@ describe("Operaciones CRUD de cafes", () => {
     expect(status).toBe(201);
   });
 
+  it("Test put -/cafes/:id- path for 400 if we try to update the cafes with a wrong id", async () => {
+    const idTestingForUpdateOnPayload = 2;
+    const idTestingForUpdateOnId = 3;
+    const updateCafe = { id: idTestingForUpdateOnPayload, nombre: "Cafe test" };
+    const response = await supertest(server).put(`/cafes/${idTestingForUpdateOnId}`).send(updateCafe);
+    const status = response.statusCode;
+    expect(status).toBe(400);
+  });
   //
 });
